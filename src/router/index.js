@@ -1,11 +1,46 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "../views/HomeView";
 
 const routes = [
   {
     path: "/",
+    name: "login",
+    component: () => import("../components/LoginComponent.vue")
+  },
+  {
+    path: "/home",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/:pathMatch(.*)",
+    name: "notfound",
+    component: ()=>import("../views/NotFound"),
+  },
+  {
+    path: "/users",
+    name: "users",
+    component: () => import("../views/users/Index")
+  },
+  {
+    path: "/contratos",
+    name: "contratos",
+    component: () => import("../views/contratos/Index")
+  },
+  {
+    path: "/contratos/:id",
+    name: "contratoDetails",
+    component: () => import("../views/contratos/ContratoDetails")
+  },
+  {
+    path: "/institutions",
+    name: "institutions",
+    component: () => import("../views/institutions/Index")
+  },
+  {
+    path: "/institutions/:id",
+    name: "institutionDetails",
+    component: () => import("../views/institutions/InstitutionDetails")
   },
   {
     path: "/about",
