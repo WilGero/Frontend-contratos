@@ -4,18 +4,30 @@ import HomeView from "../views/HomeView";
 const routes = [
   {
     path: "/",
-    name: "login",
-    component: () => import("../components/LoginComponent.vue")
-  },
-  {
-    path: "/home",
     name: "home",
     component: HomeView,
   },
   {
     path: "/:pathMatch(.*)",
     name: "notfound",
-    component: ()=>import("../views/NotFound"),
+    component: () => import("../views/NotFound"),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("../views/auth/Login"),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('auth')) {
+        next('/dashboard')
+      } else {
+        next()
+      }
+    }
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("../views/auth/Register")
   },
   {
     path: "/users",
@@ -43,6 +55,19 @@ const routes = [
     component: () => import("../views/institutions/InstitutionDetails")
   },
   {
+    path: "/dashboard",
+    name: "dashboard",
+    component: () => import("../views/Dashboard.vue"),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/seguimientos",
+    name: "seguimientos",
+    component: () => import("../views/seguimientos/Index")
+  },
+  {
     path: "/about",
     name: "about",
     // route level code-splitting
@@ -58,4 +83,12 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  const protectedRoute = to.matched.some(record => record.requiresAuth);
+  if (protectedRoute && localStorage.getItem('auth')) {
+    next('/login');
+  } else {
+    next();
+  }
+});
 export default router;
