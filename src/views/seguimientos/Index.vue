@@ -7,9 +7,15 @@
           role="group"
           aria-label="Basic mixed styles example"
         >
-        <button type="button" @click="imprimir" class="btn btn-warning">Imprimir</button>
-          <button type="button" @click="PDF" class="btn btn-danger">PDF</button>
-          <button type="button" @click="Excel" class="btn btn-success">Excel</button>
+          <button type="button" @click="imprimir" class="btn btn-warning">
+            <i class="fa-solid fa-print"></i> Imprimir
+          </button>
+          <button type="button" @click="PDF" class="btn btn-danger">
+            <i class="fa-solid fa-file-pdf"></i> PDF
+          </button>
+          <button type="button" @click="Excel" class="btn btn-success">
+            <i class="fa-solid fa-file-excel"></i> Excel
+          </button>
         </div>
       </div>
     </div>
