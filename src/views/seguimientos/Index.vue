@@ -1,11 +1,21 @@
 <template>
   <div class="container-fluid">
-    <div class="card text-center ">
-      <div class="card-header text-bg-dark d-flex justify-content-between">
+    <div class="d-flex justify-content-end">
+      <div class="card row mt-2">
+        <div
+          class="btn-group"
+          role="group"
+          aria-label="Basic mixed styles example"
+        >
+        <button type="button" @click="imprimir" class="btn btn-warning">Imprimir</button>
+          <button type="button" @click="PDF" class="btn btn-danger">PDF</button>
+          <button type="button" @click="Excel" class="btn btn-success">Excel</button>
+        </div>
+      </div>
+    </div>
+    <div class="card text-center" ref="exportContent">
+      <div class="card-header text-bg-dark d-flex justify-content-center">
         <h2 class="card-title">Seguimientos</h2>
-        <button type="button" class="btn btn-warning no-imprimir" @click="imprimir">
-          <i class="fas fa-print"></i> Imprimir
-        </button>
       </div>
       <div class="card-body table-responsive">
         <table id="table" class="table table-bordered table-hover">
@@ -50,6 +60,7 @@
 
 <script>
 // import printJS from 'print-js';
+import html2pdf from "html2pdf.js";
 export default {
   data() {
     return {
@@ -71,6 +82,18 @@ export default {
     },
   },
   methods: {
+    PDF() {
+      const content = this.$refs.exportContent; // Reemplaza con la referencia a tu contenido
+      const pdfOptions = {
+        margin: 10,
+        filename: "exported-document.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      };
+
+      html2pdf(content, pdfOptions);
+    },
     getContratos() {
       this.axios
         .get("/contratos")
@@ -113,8 +136,8 @@ export default {
     font-size: 12pt;
     /* Agrega más estilos según sea necesario */
   }
-    .no-imprimir{
-    display:none;
+  .no-imprimir {
+    display: none;
   }
 }
 </style>

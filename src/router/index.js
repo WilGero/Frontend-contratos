@@ -65,7 +65,7 @@ const routes = [
   {
     path: "/seguimientos",
     name: "seguimientos",
-    component: () => import("../views/seguimientos/IndexDataTable")
+    component: () => import("../views/seguimientos/Index")
   },
   {
     path: "/grafico",
