@@ -213,7 +213,6 @@ export default {
     return {
       active: false,
       institution: {},
-      institutionUpdate: {},
       users: [],
       user: [],
       institutions: [],

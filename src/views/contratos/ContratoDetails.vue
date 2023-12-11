@@ -13,13 +13,14 @@
               </li>
               <li class="list-group-item">
                 <strong>Fecha de Finalización:</strong>
-                {{ contrato.finishDate }}
+                {{  contrato.finishDate }}
               </li>
               <li class="list-group-item">
                 <strong>Cantidad de Policías:</strong> {{ contrato.cantPolice }}
               </li>
               <li class="list-group-item">
-                <strong>Institución:</strong> {{ contrato.institution.name }}
+                <strong>Institución:</strong>
+                {{ contrato.institution.name}}
               </li>
               <li class="list-group-item">
                 <strong>Estado del Contrato:</strong>
@@ -102,27 +103,6 @@
               </div>
 
               <div class="col-md-6 mb-3">
-                <label for="institucion" class="form-label">Institución</label>
-                <select
-                  class="form-select"
-                  v-model="contrato.institutionId"
-                  id="institucion"
-                  required
-                >
-                  <option value="" selected disabled>
-                    Selecciona una institución
-                  </option>
-                  <option
-                    v-for="institution in institutions"
-                    :key="'institution-' + institution.id"
-                    :value="institution.id"
-                  >
-                    {{ institution.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6 mb-3">
                 <label for="estadoContrato" class="form-label"
                   >Estado del Contrato</label
                 >
@@ -162,53 +142,78 @@ export default {
   data() {
     return {
       active: false,
-      contrato: { institution: { name: "" }, stateContrato: { name: "" } },
+      contrato: {
+        stateContrato:'',
+        institutionId: "",
+        institution: { name: '' },
+        stateContrato: { name: '' },
+      },
       institutions: [],
-      stateContratos: [],
+      stateContratos: [{ name: "" }],
     };
   },
   async created() {
-    await this.getContrato();
-    await this.getInstitutions();
-    await this.getStateContratos();
+    await Promise.all([this.getContrato(), this.getStateContratos()]);
   },
   methods: {
+    fechaFormateada(fecha) {
+      const fechaObj = new Date(fecha);
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return fechaObj.toLocaleDateString("es-ES", options);
+    },
     editar() {
       this.active = true;
     },
     cancelar() {
       this.active = false;
     },
-    atras(){
+    atras() {
       this.$router.push({
-        name:'contratos'
+        name: "contratos",
       });
     },
     async getContrato() {
       try {
-        const response = await this.axios.get(
-          `/contratos/${this.$route.params.id}`
-        );
-        this.contrato = response.data;
+        this.contrato = (
+          await this.axios.get(`/contratos/${this.$route.params.id}`)
+        ).data;
       } catch (error) {
         console.error("Error fetching contrato:", error);
       }
     },
-    getInstitutions() {
-      this.axios
-        .get("/institutions")
-        .then((response) => {
-          this.institutions = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    async getStateContratos() {
+      try {
+        const response = await this.axios.get("/state-contratos");
+        this.stateContratos = response.data;
+      } catch (error) {
+        console.error(error);
+      }
     },
-    getStateContratos() {
+    updateContrato() {
+      console.log(this.contrato);
+      const propiedadesAEliminar = [
+        "id",
+        "institution",
+        "stateContrato",
+        "institutionId",
+        "files",
+        "createdAt",
+      ];
+
+      propiedadesAEliminar.forEach((propiedad) => {
+        if (this.contrato.hasOwnProperty(propiedad)) {
+          delete this.contrato[propiedad];
+        }
+      });
+
+      console.log(this.contrato);
+
       this.axios
-        .get("/state-contratos")
+        .patch(`/contratos/${this.$route.params.id}`, this.contrato)
         .then((response) => {
-          this.stateContratos = response.data;
+          this.contrato = response.data;
+          this.active = false;
+          this.getContrato();
         })
         .catch((error) => {
           console.log(error);

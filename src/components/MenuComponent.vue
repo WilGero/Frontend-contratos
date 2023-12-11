@@ -62,6 +62,15 @@
             <router-link
               class="nav-link"
               aria-current="page"
+              :to="{ name: 'grafico' }"
+              style="color: #ffffff"
+              >Grafico</router-link
+            >
+          </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              aria-current="page"
               :to="{ name: 'about' }"
               style="color: #ffffff"
               >Acerca de...</router-link
