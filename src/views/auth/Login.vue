@@ -39,7 +39,7 @@
               </div>
               <div class="text-center">
                 <p>
-                  ¿No tienes una cuenta? <a href="#">Regístrate</a>
+                  ¿No tienes una cuenta? <router-link :to="{name:'register'}">Regístrate</router-link>
                 </p>
               </div>
             </form>
