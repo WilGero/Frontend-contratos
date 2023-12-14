@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid mt-5">
     <div class="row">
-      <div class="col-md-6  m-auto">
+      <div class="col-md-6 m-auto">
         <div class="card">
           <div class="card-header text-bg-dark d-flex justify-content-between">
             <h2 class="mb-4 card-title text-center">Contratos</h2>
@@ -30,26 +30,31 @@
                     <td>{{ contrato.institution.name }}</td>
                     <td>{{ contrato.stateContrato.name }}</td>
                     <td>
-                      <router-link
-                        :to="{
-                          name: 'contratoDetails',
-                          params: { id: contrato.id },
-                        }"
-                        class="btn btn-secondary btn-detalle"
-                        data-toggle="collapse"
-                        data-target="#detalleContrato1"
-                        aria-expanded="false"
-                        aria-controls="detalleContrato1"
-                      >
-                        <i class="fas fa-info-circle"></i> Ver Detalles
-                      </router-link>
-                      <button
-                        @click="deleteContrato(contrato.id)"
-                        type="button"
-                        class="btn btn-danger"
-                      >
-                        <i class="fas fa-trash-alt"></i> Eliminar
-                      </button>
+                      <div class="btn-group">
+                        <router-link
+                          :to="{
+                            name: 'contratoDetails',
+                            params: { id: contrato.id },
+                          }"
+                          class="btn btn-secondary btn-sm"
+                          data-toggle="collapse"
+                          data-target="#detalleContrato1"
+                          aria-expanded="false"
+                          aria-controls="detalleContrato1"
+                        >
+                          <i class="fas fa-info-circle"></i> Ver Detalles
+                        </router-link>
+                        <button
+                          @click="deleteContrato(contrato.id)"
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                        >
+                          <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                        <button @click="subirArchivo()" class="btn btn-outline-warning btn-sm">
+                          <i class="fas fa-upload"></i> Subir Archivo
+                        </button>
+                      </div>
                     </td>
                   </tr>
                   <!-- Agrega más filas según sea necesario -->
@@ -166,7 +171,7 @@
                   </option>
                 </select>
               </div>
-              <div class="d-flex justify-content-center ">
+              <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-success">
                   <i class="fas fa-save"></i> Guardar
                 </button>
@@ -175,15 +180,23 @@
           </div>
         </div>
       </div>
+      <div v-if="active2" class="col-md-6">
+        <SubirArchivo></SubirArchivo>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import SubirArchivo from '@/components/SubirArchivo.vue';
 export default {
+  components:{
+    SubirArchivo
+  },
   data() {
     return {
-      active:false,
+      active: false,
+      active2:false,
       institutions: [{ name: "" }],
       stateContratos: [{ name: "" }],
       contratos: [],
@@ -233,11 +246,11 @@ export default {
           console.log(error);
         });
     },
-    nuevo(){
-      this.active=true;
+    nuevo() {
+      this.active = true;
     },
-    cancelar(){
-      this.active=false;
+    cancelar() {
+      this.active = false;
     },
     saveContrato() {
       console.log(this.contrato);
@@ -271,6 +284,9 @@ export default {
           console.log(error);
         });
     },
+    subirArchivo(){
+      this.active2=true;
+    }
   },
 };
 </script>
