@@ -100,7 +100,7 @@ export default {
     },
     deleteUser(id) {
       this.axios
-        .delete("/users/" + id)
+        .delete("/users/"+id)
         .then(() => {
           this.users = this.users.filter(
             (user) => user.id != id
