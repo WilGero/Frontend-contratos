@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-end">
       <div class="card row mt-2">
         <div
-          class="btn-group"
+          class="btn-group no-imprimir"
           role="group"
           aria-label="Basic mixed styles example"
         >
